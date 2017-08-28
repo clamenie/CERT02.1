@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit
+         verbose="false">
+	<testsuites>
+		<testsuite name="DefaultSuite">
+    			<directory>test/</directory>
+    			<file>dao/DBController.php</file>
+  		</testsuite>
+	</testsuites>
+
+</phpunit>
