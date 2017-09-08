@@ -4,11 +4,14 @@ namespace Test;
 * Unit Test for DB Controller
 */
 
-use PHPUnit\Framework\TestCase;
+require_once 'PHPUnit/Autoload.php';
+
 
 use DAO\DBController;
 
-class DBControllerTest extends TestCase	
+use DAO\Debt;
+
+class DBControllerTest extends \PHPUnit_Framework_TestCase	
 {
 	
 	public function testCanLogin()
@@ -51,6 +54,21 @@ class DBControllerTest extends TestCase
             $dbController->logout('admin@unknown.fr', 'azerty'));
         
     }
+    public function testCanUpdateDebts() 
+    {
+        $debts = new DBController();
+        $this->assertEquals(
+            true,
+            $debts->updateDebt(1, 'En Cours'));
+    }
+    public function testCantUpdateDebts()
+    {
+        $debts = new DBController();
+        $this->assertEquals(
+            false,
+            $debts->updateDebt('za', 'En Cours'));
+    }
 
 }
+
 ?>

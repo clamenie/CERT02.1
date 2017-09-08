@@ -1,12 +1,12 @@
 <?php
 namespace DAO;
-
+use PDO;
 	/**
 	* Database Controller
 	*/
 	class DBController
 	{
-		private $db;
+		public $db;
 
 		/**
 		 * Function which adds a salt to a password, 
@@ -29,6 +29,17 @@ namespace DAO;
 		public function __construct()
 		{
 			# Connect to Database..
+			$host = 'localhost'; 
+    		$db_name = 'cert02'; 
+    		$db_username = 'root'; 
+    		$db_password = 'facesimplon2016';
+			try {
+        		$this->db = new PDO('mysql:host='. $host .';dbname='.$db_name, $db_username, $db_password);
+        		$this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    		}
+    		catch (PDOException $exc) {
+        		exit('Error Connecting To DataBase');
+    		}
 		}
 
 		/**
@@ -39,7 +50,8 @@ namespace DAO;
 		 * @returns boolean 
 		 */
 		public function login($email, $pass) : bool{
-			$encrypted_pass = sha1($this->salt($pass));
+			//$encrypted_pass = sha1($this->salt($pass));
+			$encrypted_pass = $pass;
 			$query = "SELECT * FROM t_users 
 				WHERE email = :email 
 				AND password = :pass";
@@ -58,7 +70,6 @@ namespace DAO;
 				$handle->bindParam(':email', $email);
 				$handle->execute();
 			}
-
 			return $logsIn;
 		}
 
@@ -89,5 +100,83 @@ namespace DAO;
 			}
 			return $loggedIn;
 		}
+		/**
+		* Function which gets the debts that the user can manage
+		* @param email: string - the email of the user's account
+		* @returns Object[] ?
+		**/
+		public function getDebts($id) {
+			$debts = array();
+			$query = "SELECT *
+			FROM t_users
+			INNER JOIN t_debts ON t_users.owner = t_debts.id
+			WHERE id = :id";
+			$handle = $this->db->prepare($query);
+			$handle->bindParam(':id', $id);
+			$handle->execute();
+			while ($data = $handle->fetch(PDO::FETCH_ASSOC)) {
+            	$debts[] = new Debt($data);
+        	}
+        	return $debts;	
+		}
+
+		/**
+		* Function which updates the debt's state, and get
+		* the updated debts
+		* @param id: number - the id of the debt
+		* @returns boolean
+		**/
+		public function updateDebt($id, $state) {
+			$query = "UPDATE t_debts
+				SET state = :state
+				WHERE id = :id";
+			$handle = $this->db->prepare($query);
+			$handle->bindParam(':id', $id);
+			$handle->bindParam(':state', $state);
+			$handle->execute();
+			$err = $handle->errorCode();
+			if($err !== '00000') {
+				error_log($err->errorInfo);
+				return false;
+			} else {
+				return true;
+			}
+		}
+		
 	}
-	?>
+	class Debt{
+		
+		private $id;
+		public $name;
+		public $amount;
+		public $state;
+		public $owner;
+
+		public function __construct(array $donnees) {
+        	$this->insertData($donnees);
+    	}
+ 
+    	public function insertData($donnees) {
+        	foreach ($donnees as $key => $value) {
+         	   switch ($key) {
+                case 'id':
+                    $this->id = (int) $value;
+                    break;
+                case 'name':
+                    $this->name = (string) $value;
+                    break;
+                case 'amount':
+                    $this->amount = (float) $value;
+                    break;
+                case 'state':
+                    $this->state = (string) $value;
+                   	break;
+                case 'owner':
+                    $this->owner = (int) $value;
+                   	break;
+            	}
+        	}
+    	}
+		
+	}
+?>
