@@ -37,8 +37,9 @@ use PDO;
         		$this->db = new PDO('mysql:host='. $host .';dbname='.$db_name, $db_username, $db_password);
         		$this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     		}
-    		catch (PDOException $exc) {
-        		exit('Error Connecting To DataBase');
+    		catch (\PDOException $exc) {
+					error_log($exc->getMessage());
+        		print('Error Connecting To Database');
     		}
 		}
 
@@ -50,10 +51,10 @@ use PDO;
 		 * @returns boolean 
 		 */
 		public function login($email, $pass) : bool{
-			//$encrypted_pass = sha1($this->salt($pass));
-			$encrypted_pass = $pass;
-			$query = "SELECT * FROM t_users 
-				WHERE email = :email 
+			$encrypted_pass = sha1($this->salt($pass));
+			// $encrypted_pass = $pass;
+			$query = "SELECT * FROM t_users
+				WHERE email = :email
 				AND password = :pass";
 			$handle = $this->db->prepare($query);
 			$handle->bindParam(':email', $email);
@@ -102,15 +103,15 @@ use PDO;
 		}
 		/**
 		* Function which gets the debts that the user can manage
-		* @param email: string - the email of the user's account
-		* @returns Object[] ?
+		* @param id: int - the id of the user
+		* @returns Debt[] ?
 		**/
 		public function getDebts($id) {
 			$debts = array();
 			$query = "SELECT *
 			FROM t_users
-			INNER JOIN t_debts ON t_users.owner = t_debts.id
-			WHERE id = :id";
+			INNER JOIN t_debts ON t_users.id = t_debts.owner
+			WHERE t_users.id = :id";
 			$handle = $this->db->prepare($query);
 			$handle->bindParam(':id', $id);
 			$handle->execute();
@@ -143,6 +144,19 @@ use PDO;
 			}
 		}
 		
+		public function getTotalDebt($userId){
+			$debts = array();
+			$query = "SELECT sum(amount) as s
+			FROM t_debts
+			WHERE t_debts.owner = :id";
+			$handle = $this->db->prepare($query);
+			$handle->bindParam(':id', (int) $id);
+			$handle->execute();
+			$sum = 0;
+			$connected = $handle->fetchAll();
+			$sum = $connected[0]['s'];
+    	return $sum;
+		}
 	}
 	class Debt{
 		
@@ -157,6 +171,7 @@ use PDO;
     	}
  
     	public function insertData($donnees) {
+				if(!is_null($donnees)){
         	foreach ($donnees as $key => $value) {
          	   switch ($key) {
                 case 'id':
@@ -174,8 +189,11 @@ use PDO;
                 case 'owner':
                     $this->owner = (int) $value;
                    	break;
+								default:
+										error_log("Uknown attribute to set on Debt ".$key);
             	}
         	}
+				}
     	}
 		
 	}

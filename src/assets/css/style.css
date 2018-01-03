@@ -1,0 +1,8 @@
+/* HOME */
+*{
+  box-sizing: border-box;
+}
+.leftpane, .rightpane{float:left;width:50%;height:100%;}
+.debt{}
+.state{}
+.cost{}

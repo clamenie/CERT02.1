@@ -68,6 +68,9 @@ class DBControllerTest extends \PHPUnit_Framework_TestCase
             false,
             $debts->updateDebt('za', 'En Cours'));
     }
+		public function testSumDebts()
+    {
+    }
 
 }
 
