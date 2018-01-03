@@ -24,21 +24,16 @@ Réalisez au minimum les exercices obligatoires.
 Faites un commit pour chaque changement.
 Il n'est pas nécessaire de réaliser l'ensemble de ces exercices
 
-## Exercices Obligatoires
+## Exercices Algorithmie
 ### Exercice 01 : Connection à la base de données
 La page home.php a été implementée.
 Ouvrez la au sein de votre navigateur. Il semblerait qu'une erreur ait lieu.
 Vérifiez le code afin de corriger la connection à la base de données.
 
-### Exercice 02 : Créez un test unitaire
-Executez l'ensemble des tests unitaires définis au sein du fichier phpunit.xml
-Ouvrez le fichier DbControllerTest et implémentez la fonction testSumDebts();
-Ce test unitaire doit tester la fonction getTotalDebts du DBController.
-
-## Exercices Optionnels
-### Exercice 03 : Gestion de la connection
+### Exercice 02 : Gestion de la connection
 Un formulaire a déjà été mis en place au sein de la page login.php.
 Ecrivez le code nécessaire pour que le formulaire simules une connection à la base de données.
+
 
 ### Exercice 04 : Gestion de la navigation au sein d'un site
 Au sein de la page index.php, gérez la navigation entre les deux autres en fonction de si la session est active ou non.
@@ -47,8 +42,19 @@ Au sein de la page index.php, gérez la navigation entre les deux autres en fonc
 
 Et assurez-vous qu'ils fonctionnent.
 
+## Exercices sur les tests unitaires
+
+### Exercice 01 : Créer un test unitaire
+Ouvrez le fichier DbControllerTest et implémentez la fonction testSumDebts();
+Ce test unitaire doit tester la fonction getTotalDebts du DBController.
+
+### Exercice 02 : Executer les tests unitaires
+Executez l'ensemble des tests unitaires et sauvegardez le rapport au sein du fichier phpunit.initial_result
+Corrigez au moins un des tests existants.
+
+## Bonus
 ### Exercice 06 : Design
 Un peu de temps libre ? Vous avez le design attendu au sein du pdf !
 
-### Exercice 06 : Design
-Un peu de temps libre ? Vous avez le design attendu au sein du pdf !
+### Exercice 07 : Refactoring
+Beaucoup de blocs de code sont mal conçus. Refactorez quelques éléments tout en précisant au sein du nom de votre commit le refactoring réalisé.

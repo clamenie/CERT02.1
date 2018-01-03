@@ -56,7 +56,7 @@ use PDO;
 			$query = "SELECT * FROM t_users
 				WHERE email = :email
 				AND password = :pass";
-			$handle = $this->db->prepare($query);
+			$handle = $db->prepare($query);
 			$handle->bindParam(':email', $email);
 			$handle->bindParam(':pass' , $encrypted_pass);
 			$handle->execute();
@@ -85,7 +85,7 @@ use PDO;
 			$query = "SELECT * FROM t_users 
 				WHERE email = :email 
 				AND loggedIn = 1";
-			$handle = $db->prepare($query);
+			$handle = $this->db->prepare($query);
 			$handle->bindParam(':email', $email);
 			$handle->execute();
 
@@ -153,8 +153,8 @@ use PDO;
 			$handle->bindParam(':id', (int) $id);
 			$handle->execute();
 			$sum = 0;
-			$connected = $handle->fetchAll();
-			$sum = $connected[0]['s'];
+			$records = $handle->fetchAll();
+			if(count($records)==1) $sum = $records[0]['s'];
     	return $sum;
 		}
 	}
