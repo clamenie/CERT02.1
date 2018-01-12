@@ -30,9 +30,9 @@ use PDO;
 		{
 			# Connect to Database..
 			$host = 'localhost';
-			$db_name = 'cert02';
+			$db_name = 'certif2.1';
 			$db_username = 'root';
-			$db_password = 'bonjour';
+			$db_password = 'MySQL';
 			try {
         		$this->db = new PDO('mysql:host='. $host .';dbname='.$db_name, $db_username, $db_password);
         		$this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);

@@ -3,7 +3,7 @@ namespace Test;
 /**
 * Unit Test for DB Controller
 */
-
+use PHPUnit\Framework\TestCase; //modificar 
 require_once 'PHPUnit/Autoload.php';
 
 
@@ -11,7 +11,7 @@ use DAO\DBController;
 
 use DAO\Debt;
 
-class DBControllerTest extends \PHPUnit_Framework_TestCase
+class DBControllerTest extends \PHPUnit\Framework\TestCase
 {
 
 	public function testCanLogin()
