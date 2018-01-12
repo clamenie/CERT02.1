@@ -9,7 +9,7 @@ use PDO;
 		public $db;
 
 		/**
-		 * Function which adds a salt to a password, 
+		 * Function which adds a salt to a password,
 		 * for granting a better security.
 		 *	@param : 	string - 	The password to salt
 		 *	@returns : 	string - 	The salted password
@@ -29,10 +29,10 @@ use PDO;
 		public function __construct()
 		{
 			# Connect to Database..
-			$host = 'localhost'; 
-    		$db_name = 'cert02'; 
-    		$db_username = 'root'; 
-    		$db_password = 'facesimplon2016';
+			$host = 'localhost';
+			$db_name = 'cert02';
+			$db_username = 'root';
+			$db_password = 'bonjour';
 			try {
         		$this->db = new PDO('mysql:host='. $host .';dbname='.$db_name, $db_username, $db_password);
         		$this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -44,11 +44,11 @@ use PDO;
 		}
 
 		/**
-		 * Function which verifies that the given account exists 
+		 * Function which verifies that the given account exists
 		 * in the database. And logs him in.
 		 * @param email : string 	- 	The email of the user account
 		 * @param pass  : string 	-	The password in clear
-		 * @returns boolean 
+		 * @returns boolean
 		 */
 		public function login($email, $pass) : bool{
 			$encrypted_pass = sha1($this->salt($pass));
@@ -64,7 +64,7 @@ use PDO;
 			$connected = $handle->fetchAll();
 			$logsIn = (count($connected)>0);
 			if($logsIn){
-				$query = "UPDATE t_users 
+				$query = "UPDATE t_users
 				SET loggedIn = 1
 				WHERE email = :email";
 				$handle = $this->db->prepare($query);
@@ -74,16 +74,16 @@ use PDO;
 			return $logsIn;
 		}
 
-		
+
 		/**
-		 * Function which verifies that the given account exists 
+		 * Function which verifies that the given account exists
 		 * in the database. And logs him out.
 		 * @param email : string 	- 	The email of the user account
-		 * @returns boolean 
+		 * @returns boolean
 		 */
 		public function logout($email) : bool{
-			$query = "SELECT * FROM t_users 
-				WHERE email = :email 
+			$query = "SELECT * FROM t_users
+				WHERE email = :email
 				AND loggedIn = 1";
 			$handle = $this->db->prepare($query);
 			$handle->bindParam(':email', $email);
@@ -92,7 +92,7 @@ use PDO;
 			$connected = $handle->fetchAll();
 			$loggedIn = (count($connected)>0);
 			if($loggedIn){
-				$query = "UPDATE t_users 
+				$query = "UPDATE t_users
 				SET loggedIn = 0
 				WHERE email = :email";
 				$handle = $db->prepare($query);
@@ -117,8 +117,8 @@ use PDO;
 			$handle->execute();
 			while ($data = $handle->fetch(PDO::FETCH_ASSOC)) {
             	$debts[] = new Debt($data);
-        	}
-        	return $debts;	
+    	}
+    	return $debts;
 		}
 
 		/**
@@ -143,23 +143,24 @@ use PDO;
 				return true;
 			}
 		}
-		
-		public function getTotalDebt($userId){
+
+		public function getTotalDebts($userId){
 			$debts = array();
 			$query = "SELECT sum(amount) as s
 			FROM t_debts
 			WHERE t_debts.owner = :id";
 			$handle = $this->db->prepare($query);
-			$handle->bindParam(':id', (int) $id);
+			$handle->bindParam(':id', $userId);
 			$handle->execute();
 			$sum = 0;
 			$records = $handle->fetchAll();
 			if(count($records)==1) $sum = $records[0]['s'];
     	return $sum;
 		}
+
 	}
 	class Debt{
-		
+
 		private $id;
 		public $name;
 		public $amount;
@@ -167,10 +168,10 @@ use PDO;
 		public $owner;
 
 		public function __construct(array $donnees) {
-        	$this->insertData($donnees);
+        	$this->hydrate($donnees);
     	}
- 
-    	public function insertData($donnees) {
+
+    	public function hydrate($donnees) {
 				if(!is_null($donnees)){
         	foreach ($donnees as $key => $value) {
          	   switch ($key) {
@@ -195,6 +196,6 @@ use PDO;
         	}
 				}
     	}
-		
+
 	}
 ?>

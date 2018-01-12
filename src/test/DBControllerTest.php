@@ -11,9 +11,9 @@ use DAO\DBController;
 
 use DAO\Debt;
 
-class DBControllerTest extends \PHPUnit_Framework_TestCase	
+class DBControllerTest extends \PHPUnit_Framework_TestCase
 {
-	
+
 	public function testCanLogin()
     {
     	$dbController = new DBController();
@@ -21,7 +21,7 @@ class DBControllerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(
             true,
             $dbController->login('admin@toto.fr', 'azerty'));
-        
+
     }
 
 	public function testCantLogin()
@@ -31,18 +31,18 @@ class DBControllerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(
             false,
             $dbController->login('admin@unknown.fr', 'azerty'));
-        
+
     }
 
     public function testCanLogout()
     {
-        
+
         $dbController = new DBController();
 
         $this->assertEquals(
             true,
             $dbController->logout('admin@toto.fr', 'azerty'));
-        
+
     }
 
     public function testCantLogout()
@@ -52,9 +52,9 @@ class DBControllerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(
             false,
             $dbController->logout('admin@unknown.fr', 'azerty'));
-        
+
     }
-    public function testCanUpdateDebts() 
+    public function testCanUpdateDebts()
     {
         $debts = new DBController();
         $this->assertEquals(
